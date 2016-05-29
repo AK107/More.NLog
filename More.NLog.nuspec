@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>More.NLog</id>
+		<version>1.0.0.0</version>
+		<title>More.NLog</title>
+		<authors>AK107</authors>
+		<owners />
+		<projectUrl>https://github.com/AK107/NMore.Log.git</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>More.NLog</description>
+		<summary />
+		<tags>
+			NLog Pushbullet Telegram
+		</tags>
+	</metadata>
+	<files>
+		<file src="More.NLog\bin\Release\More.NLog.dll" target="lib\net46" />
+		<file src="More.NLog\bin\Release\More.NLog.pdb" target="lib\net46" />
+	</files>
+</package>
