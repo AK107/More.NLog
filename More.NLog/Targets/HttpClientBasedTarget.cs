@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NLog;
@@ -11,24 +12,44 @@ namespace More.NLog.Targets
     {
         protected readonly HttpClient Client = new HttpClient();
 
+        protected override void Write(LogEventInfo logEvent)
+        {
+            throw new NotSupportedException("Synchronous write operation is not supported.");
+        }
+
         protected override void Write(AsyncLogEventInfo info)
         {
             try
             {
-                Send(info.LogEvent).Wait();
+                WriteAsync(info.LogEvent).ContinueWith(t => info.Continuation(t.Exception?.GetBaseException()));
             }
             catch (Exception ex)
             {
+                InternalLogger.Error(ex, "WriteAsync error.");
                 info.Continuation(ex);
             }
         }
 
-        protected abstract Task Send(LogEventInfo logEvent);
+        private async Task WriteAsync(LogEventInfo logEvent)
+        {
+            var result = await Client.PostAsJsonAsync(Url, GetContent(logEvent));
+
+            InternalLogger.Debug("Response from {0}: {1}", Url, result);
+
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new HttpResponseException(result);
+            }
+        }
+
+        protected abstract string Url { get; }
+
+        protected abstract IDictionary<string, string> GetContent(LogEventInfo logEvent);
 
         protected override void CloseTarget()
         {
-            base.CloseTarget();
             Client.Dispose();
+            base.CloseTarget();
         }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using NLog;
-using NLog.Common;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
@@ -14,7 +11,6 @@ namespace More.NLog.Targets
     [Target("Pushbullet")]
     public sealed class PushbulletTarget : HttpClientBasedTarget
     {
-        private const string ApiUrl            = "https://api.pushbullet.com/v2/pushes";
         private const string AccessTokenHeader = "Access-Token";
 
         private const int MaxTitleLength       = 200;
@@ -42,24 +38,16 @@ namespace More.NLog.Targets
             Title = "Message from NLog on ${machinename}";
         }
 
-        protected override async Task Send(LogEventInfo logEvent)
+        protected override string Url => "https://api.pushbullet.com/v2/pushes";
+
+        protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
         {
-            var dictionary = new Dictionary<string, object>
+            return new Dictionary<string, string>
             {
                 {"type" , "note"},
-                {"title",  Title.Render(logEvent).Cut(MaxTitleLength)},
+                {"title", Title .Render(logEvent).Cut(MaxTitleLength)},
                 {"body" , Layout.Render(logEvent).Cut(MaxTextLength)},
             };
-
-            var result = await Client.PostAsJsonAsync(ApiUrl, dictionary);
-
-            InternalLogger.Debug(result.ToString());
-
-            if (!result.IsSuccessStatusCode)
-            {
-                throw new HttpResponseException(result);
-            }
-
         }
     }
 }
