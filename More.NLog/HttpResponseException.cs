@@ -5,12 +5,12 @@ namespace More.NLog
 {
     public sealed class HttpResponseException : Exception
     {
-        private readonly HttpResponseMessage result;
+        public HttpResponseMessage Result { get; }
 
         public HttpResponseException(HttpResponseMessage result)
-            : base($"Http response exception: {result.StatusCode}.")
+            : base($"{result.StatusCode} ({(int) result.StatusCode}), {result.ReasonPhrase}.")
         {
-            this.result = result;
+            Result = result;
         }
     }
 }

@@ -21,7 +21,17 @@ namespace More.NLog.Targets
         {
             try
             {
-                WriteAsync(info.LogEvent).ContinueWith(t => info.Continuation(t.Exception?.GetBaseException()));
+                WriteAsync(info.LogEvent).ContinueWith(t =>
+                {
+                    var exception = t.Exception?.GetBaseException();
+
+                    if (exception != null)
+                    {
+                        InternalLogger.Error(exception, "WriteAsync error.");
+                    }
+
+                    info.Continuation(exception);
+                });
             }
             catch (Exception ex)
             {

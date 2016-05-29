@@ -8,6 +8,9 @@ namespace More.NLog.Targets
     [Target("Telegram")]
     public sealed class TelegramTarget : HttpClientBasedTarget
     {
+        private const string TelegramApiUrl    = "https://api.telegram.org/bot";
+        private const string TelegramApiMethod = "sendMessage";
+
         private const int MaxTextLength = 4096;
 
         [RequiredParameter]
@@ -16,7 +19,7 @@ namespace More.NLog.Targets
         [RequiredParameter]
         public string ChatId { get; set; }
 
-        protected override string Url => $"https://api.telegram.org/bot{Token}/sendMessage";
+        protected override string Url => $"{TelegramApiUrl}{Token}/{TelegramApiMethod}";
 
         protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
         {

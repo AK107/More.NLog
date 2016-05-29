@@ -11,6 +11,7 @@ namespace More.NLog.Targets
     [Target("Pushbullet")]
     public sealed class PushbulletTarget : HttpClientBasedTarget
     {
+        private const string PushbulletApiUrl  = "https://api.pushbullet.com/v2/pushes";
         private const string AccessTokenHeader = "Access-Token";
 
         private const int MaxTitleLength       = 200;
@@ -38,7 +39,7 @@ namespace More.NLog.Targets
             Title = "Message from NLog on ${machinename}";
         }
 
-        protected override string Url => "https://api.pushbullet.com/v2/pushes";
+        protected override string Url => PushbulletApiUrl;
 
         protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
         {

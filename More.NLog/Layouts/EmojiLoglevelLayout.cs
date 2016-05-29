@@ -12,14 +12,14 @@ namespace More.NLog.Layouts
     [ThreadAgnostic]
     public class EmojiLogLevelLayoutRendererWrapper : WrapperLayoutRendererBase
     {
-        private static readonly Dictionary<int, string> Emojies = new Dictionary<int, string>
+        private static readonly Dictionary<LogLevel, string> Emojies = new Dictionary<LogLevel, string>
         {
-            {LogLevel.Trace.Ordinal, char.ConvertFromUtf32(0x1F4AC)},
-            {LogLevel.Debug.Ordinal, char.ConvertFromUtf32(0x1F47B)},
-            {LogLevel.Info .Ordinal, char.ConvertFromUtf32(0x2139 )},
-            {LogLevel.Warn .Ordinal, char.ConvertFromUtf32(0x26A0 )},
-            {LogLevel.Error.Ordinal, char.ConvertFromUtf32(0x1F6AB)},
-            {LogLevel.Fatal.Ordinal, char.ConvertFromUtf32(0x26d4 )}
+            {LogLevel.Trace, char.ConvertFromUtf32(0x1F4AC)},
+            {LogLevel.Debug, char.ConvertFromUtf32(0x1F47B)},
+            {LogLevel.Info , char.ConvertFromUtf32(0x2139 )},
+            {LogLevel.Warn , char.ConvertFromUtf32(0x26A0 )},
+            {LogLevel.Error, char.ConvertFromUtf32(0x1F6AB)},
+            {LogLevel.Fatal, char.ConvertFromUtf32(0x26d4 )}
         };
 
         [DefaultValue(true)]
@@ -39,7 +39,7 @@ namespace More.NLog.Layouts
 
             string emoji;
 
-            return Emojies.TryGetValue(logEvent.Level.Ordinal, out emoji) ? emoji : string.Empty;
+            return Emojies.TryGetValue(logEvent.Level, out emoji) ? emoji : string.Empty;
         }
 
         protected override string Transform(string text) => text;
