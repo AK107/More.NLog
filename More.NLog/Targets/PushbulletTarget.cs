@@ -14,15 +14,16 @@ namespace More.NLog.Targets
         private const string PushbulletApiUrl  = "https://api.pushbullet.com/v2/pushes";
         private const string AccessTokenHeader = "Access-Token";
 
-        private const int MaxTitleLength       = 200;
-        private const int MaxTextLength        = 4096;
+        private const int    MaxTitleLength    = 200;
+        private const int    MaxTextLength     = 4096;
 
         [RequiredParameter]
         public string Token
         {
             get
             {
-                return Client.DefaultRequestHeaders.GetValues(AccessTokenHeader)?.Single();
+                return Client.DefaultRequestHeaders.Contains(AccessTokenHeader) ? Client.DefaultRequestHeaders.GetValues(AccessTokenHeader).Single()
+                                                                                : null;
             }
             set
             {

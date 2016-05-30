@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using NLog;
 using NLog.Common;
 using NLog.Targets;
@@ -19,36 +18,28 @@ namespace More.NLog.Targets
 
         protected override void Write(AsyncLogEventInfo info)
         {
+            WriteAsync(info);
+        }
+
+        private async void WriteAsync(AsyncLogEventInfo info)
+        {
             try
             {
-                WriteAsync(info.LogEvent).ContinueWith(t =>
+                var result = await Client.PostAsJsonAsync(Url, GetContent(info.LogEvent));
+
+                InternalLogger.Debug("Response from {0}: {1}", Url, result);
+
+                if (!result.IsSuccessStatusCode)
                 {
-                    var exception = t.Exception?.GetBaseException();
+                    throw new HttpResponseException(result);
+                }
 
-                    if (exception != null)
-                    {
-                        InternalLogger.Error(exception, "WriteAsync error.");
-                    }
-
-                    info.Continuation(exception);
-                });
+                info.Continuation(null);
             }
             catch (Exception ex)
             {
                 InternalLogger.Error(ex, "WriteAsync error.");
                 info.Continuation(ex);
-            }
-        }
-
-        private async Task WriteAsync(LogEventInfo logEvent)
-        {
-            var result = await Client.PostAsJsonAsync(Url, GetContent(logEvent));
-
-            InternalLogger.Debug("Response from {0}: {1}", Url, result);
-
-            if (!result.IsSuccessStatusCode)
-            {
-                throw new HttpResponseException(result);
             }
         }
 

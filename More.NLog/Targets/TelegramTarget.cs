@@ -11,7 +11,7 @@ namespace More.NLog.Targets
         private const string TelegramApiUrl    = "https://api.telegram.org/bot";
         private const string TelegramApiMethod = "sendMessage";
 
-        private const int MaxTextLength = 4096;
+        private const int    MaxTextLength     = 4096;
 
         [RequiredParameter]
         public string Token { get; set; }
@@ -19,7 +19,7 @@ namespace More.NLog.Targets
         [RequiredParameter]
         public string ChatId { get; set; }
 
-        protected override string Url => $"{TelegramApiUrl}{Token}/{TelegramApiMethod}";
+        protected override string Url => string.Concat(TelegramApiUrl, Token, "/", TelegramApiMethod);
 
         protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
         {
