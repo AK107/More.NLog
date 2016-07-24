@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/AK107/More.NLog</licenseUrl>
+    <projectUrl>https://github.com/AK107/More.NLog</projectUrl>
+    <iconUrl>https://github.com/AK107/More.NLog</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Release notes.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>NLog Pushbullet Telegram</tags>
+  </metadata>
+</package>
