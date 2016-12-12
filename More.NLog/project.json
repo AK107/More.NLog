@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "NLog": "5.0.0-beta03"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  }
+}

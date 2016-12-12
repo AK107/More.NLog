@@ -25,7 +25,7 @@ namespace More.NLog.Targets
         {
             try
             {
-                var result = await Client.PostAsJsonAsync(Url, GetContent(info.LogEvent));
+                var result = await Client.PostAsync(Url, new JsonContent(GetContent(info.LogEvent)));
 
                 InternalLogger.Debug("Response from {0}: {1}", Url, result);
 
