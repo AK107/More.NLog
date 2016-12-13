@@ -8,6 +8,13 @@
     "NLog": "5.0.0-beta03"
   },
   "frameworks": {
+    ".NETFramework,Version=v4.6": {
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Net.Http": "" 
+      }
+    },
     "netstandard1.6": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
