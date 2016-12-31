@@ -19,15 +19,31 @@ namespace More.NLog.Targets
         [RequiredParameter]
         public string ChatId { get; set; }
 
+        public string ParseMode { get; set; }
+
+        public bool DisableNotification { get; set; }
+
         protected override string Url => string.Concat(TelegramApiUrl, Token, "/", TelegramApiMethod);
 
-        protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
+        protected override IDictionary<string, object> GetContent(LogEventInfo logEvent)
         {
-            return new Dictionary<string, string>
+            var content = new Dictionary<string, object>
             {
-                {"chat_id", ChatId },
-                {"text"   , Layout.Render(logEvent).Cut(MaxTextLength)},
+                { "chat_id"   , ChatId },
+                { "text"      , Layout.Render(logEvent).Cut(MaxTextLength) }
             };
+
+            if (!string.IsNullOrEmpty(ParseMode))
+            {
+                content.Add("parse_mode", ParseMode);
+            }
+
+            if (DisableNotification)
+            {
+                content.Add("disable_notification", DisableNotification);
+            }
+
+            return content;
         }
     }
 }

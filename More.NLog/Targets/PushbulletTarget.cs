@@ -22,8 +22,8 @@ namespace More.NLog.Targets
         {
             get
             {
-                return Client.DefaultRequestHeaders.Contains(AccessTokenHeader) ? Client.DefaultRequestHeaders.GetValues(AccessTokenHeader).Single()
-                                                                                : null;
+                IEnumerable<string> values;
+                return Client.DefaultRequestHeaders.TryGetValues(AccessTokenHeader, out values) ? values.Single() : null;
             }
             set
             {
@@ -42,13 +42,13 @@ namespace More.NLog.Targets
 
         protected override string Url => PushbulletApiUrl;
 
-        protected override IDictionary<string, string> GetContent(LogEventInfo logEvent)
+        protected override IDictionary<string, object> GetContent(LogEventInfo logEvent)
         {
-            return new Dictionary<string, string>
+            return new Dictionary<string, object>
             {
-                {"type" , "note"},
-                {"title", Title .Render(logEvent).Cut(MaxTitleLength)},
-                {"body" , Layout.Render(logEvent).Cut(MaxTextLength)},
+                { "type" , "note" },
+                { "title", Title .Render(logEvent).Cut(MaxTitleLength) },
+                { "body" , Layout.Render(logEvent).Cut(MaxTextLength)  }
             };
         }
     }

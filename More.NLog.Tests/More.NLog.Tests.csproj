@@ -55,8 +55,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\More.NLog\More.NLog.csproj">
-      <Project>{52f8dc0e-5fb3-4584-a555-79e8101f755d}</Project>
+    <ProjectReference Include="..\More.NLog\More.NLog.xproj">
+      <Project>{091f2ff7-fb41-4f8f-b017-a92db580e63e}</Project>
       <Name>More.NLog</Name>
     </ProjectReference>
   </ItemGroup>

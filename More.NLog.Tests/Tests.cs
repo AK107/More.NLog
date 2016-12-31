@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using NUnit.Framework;
 
 namespace More.NLog.Tests
@@ -6,19 +7,17 @@ namespace More.NLog.Tests
     [TestFixture]
     public sealed class Tests
     {
+        private readonly Logger log = LogManager.GetCurrentClassLogger();
+
         [Test]
         public void Test()
         {
-            var log = LogManager.GetCurrentClassLogger();
-
             log.Trace("This is Trace message.");
             log.Debug("This is Debug message.");
             log.Info ("This is Information message.");
             log.Warn ("This is Warning message.");
-            log.Error("This is Error message.");
-            log.Fatal("This is Fatal message.");
-
-            LogManager.Flush();
+            log.Error(new OutOfMemoryException(), "This is Error message.");
+            log.Fatal(new OutOfMemoryException(), "This is Fatal message.");
         }
     }
 }
