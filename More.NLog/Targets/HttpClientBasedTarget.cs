@@ -20,7 +20,7 @@ namespace More.NLog.Targets
             WriteAsync(info);
         }
 
-        private async void WriteAsync(AsyncLogEventInfo info)
+        private void WriteAsync(AsyncLogEventInfo info)
         {
             var task = DoWriteAsync(info);
 
@@ -28,35 +28,35 @@ namespace More.NLog.Targets
 
             pendingEvents.TryAdd(info, task);
 
-            Exception exception = null;
-
-            try
+            task.ContinueWith(x =>
             {
-                await task;
-            }
-            catch (Exception ex)
-            {
-                InternalLogger.Error(ex, "Async write error of event: {0}.", info.LogEvent.SequenceID);
-                exception = ex;
-            }
+                InternalLogger.Trace("Remove pending event: {0}.", info.LogEvent.SequenceID);
 
-            InternalLogger.Trace("Remove pending event: {0}.", info.LogEvent.SequenceID);
-
-            Task tmp;
-            pendingEvents.TryRemove(info, out tmp);
-
-            info.Continuation(exception);
+                Task tmp;
+                pendingEvents.TryRemove(info, out tmp);
+            }, 
+            TaskContinuationOptions.ExecuteSynchronously);
         }
 
         private async Task DoWriteAsync(AsyncLogEventInfo info)
         {
-            InternalLogger.Debug("Async post event: {0}.", info.LogEvent.SequenceID);
+            try
+            {
+                InternalLogger.Debug("Async post event: {0}.", info.LogEvent.SequenceID);
 
-            var result = await Client.PostAsync(Url, new JsonContent(GetContent(info.LogEvent)));
+                var result = await Client.PostAsync(Url, new JsonContent(GetContent(info.LogEvent)));
 
-            InternalLogger.Debug("Response of event {0} from '{1}': {2}", info.LogEvent.SequenceID, Url, result);
+                InternalLogger.Debug("Response of event {0} from '{1}': {2}", info.LogEvent.SequenceID, Url, result);
 
-            result.EnsureSuccessStatusCode();
+                result.EnsureSuccessStatusCode();
+
+                info.Continuation(null);
+            }
+            catch (Exception ex)
+            {
+                InternalLogger.Error(ex, "Async write error of event: {0}.", info.LogEvent.SequenceID);
+                info.Continuation(ex);
+            }
         }
 
         protected override void FlushAsync(AsyncContinuation asyncContinuation)
