@@ -1,15 +1,12 @@
 ﻿using System;
 using NLog;
-using NUnit.Framework;
 
 namespace More.NLog.Tests
 {
-    [TestFixture]
     public sealed class Tests
     {
         private readonly Logger log = LogManager.GetCurrentClassLogger();
 
-        [Test]
         public void Test()
         {
             log.Trace("This is Trace message.");

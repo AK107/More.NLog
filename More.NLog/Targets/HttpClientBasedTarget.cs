@@ -13,16 +13,16 @@ namespace More.NLog.Targets
     {
         private readonly ConcurrentDictionary<AsyncLogEventInfo, Task> pendingEvents = new ConcurrentDictionary<AsyncLogEventInfo, Task>();
 
-        protected readonly HttpClient Client = new HttpClient();
+        protected readonly HttpClient Client = new HttpClient
+        (
+#if NETSTANDARD
+            new HttpClientHandler { DefaultProxyCredentials = System.Net.CredentialCache.DefaultCredentials }
+#endif
+        );
 
         protected sealed override void Write(AsyncLogEventInfo info)
         {
-            WriteAsync(info);
-        }
-
-        private void WriteAsync(AsyncLogEventInfo info)
-        {
-            var task = DoWriteAsync(info);
+            var task = WriteAsync(info);
 
             InternalLogger.Trace("Add pending event: {0}.", info.LogEvent.SequenceID);
 
@@ -38,7 +38,7 @@ namespace More.NLog.Targets
             TaskContinuationOptions.ExecuteSynchronously);
         }
 
-        private async Task DoWriteAsync(AsyncLogEventInfo info)
+        private async Task WriteAsync(AsyncLogEventInfo info)
         {
             try
             {

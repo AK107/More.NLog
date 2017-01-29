@@ -1,24 +1,26 @@
 {
-  "version": "1.0.0-beta3",
-  "buildOptions": {
-    "debugType": "portable"
-  },
-  "dependencies": {
-    "Newtonsoft.Json": "9.0.1",
-    "NLog": "5.0.0-beta03"
-  },
+  "version": "1.0.0-beta7",
+  "copyright": "AK107 2017",
+  "authors": [ "AK107" ],
+  "description": "A custom NLog targets",
+
   "frameworks": {
-    ".NETFramework,Version=v4.6": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Net.Http": ""
-      }
-    },
-    "netstandard1.6": {
+    "netstandard16": {
       "dependencies": {
         "NETStandard.Library": "1.6.1"
+      },
+      "buildOptions": {
+        "define": [ "NETSTANDARD" ]
       }
-    }
+    },
+      "net45": {
+        "frameworkAssemblies": {
+          "System.Net.Http": ""
+        }
+      }
+    },
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "NLog": "5.0.0-beta05"
   }
 }

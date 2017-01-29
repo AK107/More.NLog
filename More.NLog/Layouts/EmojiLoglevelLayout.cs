@@ -14,12 +14,12 @@ namespace More.NLog.Layouts
     {
         private static readonly Dictionary<LogLevel, string> Emojies = new Dictionary<LogLevel, string>
         {
-            {LogLevel.Trace, char.ConvertFromUtf32(0x1F4AC)},
-            {LogLevel.Debug, char.ConvertFromUtf32(0x1F47B)},
-            {LogLevel.Info , char.ConvertFromUtf32(0x2139 )},
-            {LogLevel.Warn , char.ConvertFromUtf32(0x26A0 )},
-            {LogLevel.Error, char.ConvertFromUtf32(0x1F6AB)},
-            {LogLevel.Fatal, char.ConvertFromUtf32(0x26d4 )}
+            { LogLevel.Trace, "💬" },
+            { LogLevel.Debug, "👻" },
+            { LogLevel.Info , "ℹ" },
+            { LogLevel.Warn , "⚠" },
+            { LogLevel.Error, "🚫" },
+            { LogLevel.Fatal, "⛔" }
         };
 
         [DefaultValue(true)]
